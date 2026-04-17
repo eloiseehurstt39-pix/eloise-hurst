@@ -1,17 +1,13 @@
-# Eloise Hurst 👋
+# Eloise Hurst 
 
 **Computer Science (Artificial Intelligence) student at Edinburgh Napier University**  
-Passionate about AI, machine learning, and building things that solve real problems.
+
+I'm a Computer Science student specialising in Artificial Intelligence, currently in the my second year of my degree at Edinburgh Napier University. Passionate about AI, machine learning, and building things that solve real problems.
+I'm interested in the intersection of AI and real-world applications particularly how intelligent systems can be built into products people actually use.
 
 ---
 
-## About Me
-
-I'm a Computer Science student specialising in Artificial Intelligence, currently in the my second year of my degree at Edinburgh Napier University. I'm interested in the intersection of AI and real-world applications particularly how intelligent systems can be built into products people actually use.
-
----
-
-## 🎓 Education
+## Education
 
 **BSc Computer Science (Artificial Intelligence)**  
 Edinburgh Napier University  
@@ -23,24 +19,23 @@ Lycée Français de Barcelone
 
 ---
 
-## 💼 Experience
+## Experience
 
-**AI Department Intern — Wedia** *(May 2026 – July 2026)*  
-Paris, France  
-Wedia is France's leading Digital Asset Management (DAM) platform. During my internship I am researching and prototyping AI features focused on:
-- Predicting the marketing performance of visual assets before publication using computer vision
-- Improving the reliability and trustworthiness of AI-generated marketing content
-- How AI can optimise enterprise marketing workflows at scale
+**Software Developer — Publicis Sapient · Internship ** *(Jun 2022 - jul 2022)*  
+London Area, United Kingdom 
+
+I shadowed a Python programmer during the layout of a website of a supermarket and worked with a graphic designer, creating the design of a poster to inform employees about events in the office using Figma.
 
 ---
 
-## 🛠️ Skills
+## Skills
 
 **Languages**
 - Python
 - JavaScript
 - HTML / CSS
 - C#
+- Figma
 
 **Areas**
 - Artificial Intelligence & Machine Learning

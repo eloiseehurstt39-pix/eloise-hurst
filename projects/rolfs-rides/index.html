@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>RolfsRides</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --yellow: #F5C518;
+      --yellow-dark: #D4A800;
+      --yellow-light: #FFF8DC;
+      --dark: #1a1a1a;
+      --gray: #555;
+      --light-gray: #f4f4f4;
+      --white: #fff;
+      --green: #27ae60;
+      --red: #e74c3c;
+      --blue: #2980b9;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Phone frame */
+    .phone {
+      width: 390px;
+      height: 844px;
+      background: var(--white);
+      border-radius: 48px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    }
+
+    /* Screen system */
+    .screen {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+    .screen.active { display: flex; }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--dark);
+      color: var(--yellow);
+      padding: 52px 20px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .topbar .back {
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--yellow);
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+    .topbar h2 { font-size: 18px; font-weight: 700; }
+    .topbar .logo-small { font-size: 22px; }
+
+    /* ── HOME SCREEN ── */
+    #home { background: var(--dark); }
+
+    .home-header {
+      background: var(--dark);
+      padding: 60px 24px 32px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .home-header .taxi-icon { font-size: 64px; margin-bottom: 8px; }
+    .home-header h1 {
+      color: var(--yellow);
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .home-header h1 span { color: var(--white); }
+    .home-header p { color: #aaa; font-size: 13px; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+    .home-body {
+      background: var(--light-gray);
+      border-radius: 32px 32px 0 0;
+      padding: 28px 20px 32px;
+      flex: 1;
+    }
+
+    .location-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .location-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+    }
+    .location-row:first-child { border-bottom: 1px solid #eee; }
+    .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot.green { background: var(--green); }
+    .dot.yellow { background: var(--yellow); }
+    .location-row input {
+      border: none;
+      outline: none;
+      font-size: 15px;
+      color: var(--dark);
+      flex: 1;
+      background: transparent;
+    }
+    .location-row input::placeholder { color: #bbb; }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .booking-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .booking-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 18px 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      transition: transform 0.15s, box-shadow 0.15s;
+      border: 2px solid transparent;
+    }
+    .booking-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+    .booking-card:active { transform: scale(0.97); }
+    .booking-card .card-icon { font-size: 28px; margin-bottom: 8px; }
+    .booking-card h3 { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .booking-card p { font-size: 12px; color: var(--gray); margin-top: 2px; }
+    .booking-card.featured { border-color: var(--yellow); background: var(--yellow-light); }
+
+    .services-strip {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .services-strip::-webkit-scrollbar { display: none; }
+    .service-pill {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 10px 16px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .service-pill:hover { background: var(--yellow); }
+
+    .cta-btn {
+      width: 100%;
+      background: var(--yellow);
+      color: var(--dark);
+      border: none;
+      border-radius: 16px;
+      padding: 18px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .cta-btn:hover { background: var(--yellow-dark); }
+    .cta-btn:active { transform: scale(0.98); }
+
+    /* ── STANDARD BOOKING ── */
+    #standard .topbar, #favorite .topbar { justify-content: flex-start; }
+
+    .ride-summary {
+      background: var(--yellow-light);
+      margin: 0 20px 0;
+      border-radius: 16px;
+      padding: 16px;
+      border-left: 4px solid var(--yellow);
+    }
+    .ride-summary .route { font-size: 13px; color: var(--gray); }
+    .ride-summary .route strong { color: var(--dark); }
+
+    .price-section {
+      padding: 20px;
+    }
+    .price-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 14px; color: var(--dark); }
+
+    .price-option {
+      background: var(--white);
+      border: 2px solid #eee;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.15s;
+    }
+    .price-option:hover, .price-option.selected { border-color: var(--yellow); background: var(--yellow-light); }
+    .price-option .left { display: flex; align-items: center; gap: 10px; }
+    .price-option .po-icon { font-size: 22px; }
+    .price-option .po-label { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .price-option .po-desc { font-size: 12px; color: var(--gray); }
+    .price-option .po-price { font-size: 16px; font-weight: 800; color: var(--dark); }
+
+    .bid-box {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 0 20px 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .bid-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .bid-box p { font-size: 12px; color: var(--gray); margin-bottom: 12px; }
+    .bid-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bid-row button {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--yellow);
+      background: var(--white);
+      font-size: 20px;
+      cursor: pointer;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .bid-row button:hover { background: var(--yellow); }
+    .bid-amount {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--dark);
+      flex: 1;
+      text-align: center;
+    }
+
+    .fee-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray);
+      padding: 0 20px 16px;
+    }
+    .fee-note span { color: var(--yellow-dark); font-weight: 700; }
+
+    /* ── DRIVER SELECTION ── */
+    .driver-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 0 20px 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .driver-card:hover, .driver-card.selected { border-color: var(--yellow); box-shadow: 0 4px 20px rgba(245,197,24,0.25); }
+    .driver-avatar {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--yellow);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .driver-info { flex: 1; }
+    .driver-info h3 { font-size: 15px; font-weight: 700; color: var(--dark); }
+    .driver-info .stars { color: var(--yellow); font-size: 12px; }
+    .driver-info .driver-meta { font-size: 12px; color: var(--gray); margin-top: 2px; }
+    .driver-price { text-align: right; }
+    .driver-price .dp-amount { font-size: 18px; font-weight: 900; color: var(--dark); }
+    .driver-price .dp-eta { font-size: 11px; color: var(--gray); }
+    .driver-price .dp-badge {
+      font-size: 10px;
+      background: var(--yellow);
+      color: var(--dark);
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-weight: 700;
+      margin-top: 2px;
+      display: inline-block;
+    }
+
+    /* ── SPECIAL SERVICES ── */
+    .service-card {
+      background: var(--white);
+      border-radius: 16px;
+      margin: 0 20px 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .service-card:hover { transform: translateY(-2px); }
+    .service-card .sc-banner {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    .service-card .sc-body { padding: 14px 16px; }
+    .service-card .sc-body h3 { font-size: 15px; font-weight: 700; color: var(--dark); }
+    .service-card .sc-body p { font-size: 12px; color: var(--gray); margin-top: 3px; }
+    .service-card .sc-body .sc-tag {
+      display: inline-block;
+      margin-top: 8px;
+      background: var(--yellow-light);
+      color: var(--yellow-dark);
+      border-radius: 8px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* ── CONFIRMATION ── */
+    #confirm { background: var(--dark); }
+    .confirm-body {
+      background: var(--light-gray);
+      border-radius: 32px 32px 0 0;
+      padding: 28px 20px 40px;
+      flex: 1;
+    }
+    .confirm-header {
+      text-align: center;
+      padding: 60px 24px 32px;
+      background: var(--dark);
+    }
+    .confirm-header .check { font-size: 72px; }
+    .confirm-header h2 { color: var(--yellow); font-size: 24px; font-weight: 900; margin-top: 8px; }
+    .confirm-header p { color: #aaa; font-size: 13px; margin-top: 4px; }
+
+    .confirm-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    .confirm-row:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
+    .confirm-row .label { color: var(--gray); }
+    .confirm-row .value { font-weight: 700; color: var(--dark); }
+    .confirm-row .value.green { color: var(--green); }
+    .confirm-row .value.yellow { color: var(--yellow-dark); }
+
+    /* ── FAVORITE DRIVER SCREEN ── */
+    .search-bar {
+      margin: 16px 20px;
+      background: var(--white);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .search-bar input {
+      border: none;
+      outline: none;
+      font-size: 14px;
+      flex: 1;
+      color: var(--dark);
+    }
+    .search-bar input::placeholder { color: #bbb; }
+
+    .fav-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 8px;
+      margin-left: 6px;
+      text-transform: uppercase;
+    }
+
+    /* ── NAV BAR ── */
+    .nav-bar {
+      display: flex;
+      background: var(--white);
+      border-top: 1px solid #eee;
+      padding: 10px 0 24px;
+      flex-shrink: 0;
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 6px 0;
+    }
+    .nav-item .nav-icon { font-size: 22px; }
+    .nav-item .nav-label { font-size: 10px; color: var(--gray); font-weight: 600; }
+    .nav-item.active .nav-label { color: var(--yellow-dark); }
+
+    /* section padding */
+    .pad { padding: 16px 20px; }
+    .padx { padding: 0 20px; }
+    .mt8 { margin-top: 8px; }
+    .mt16 { margin-top: 16px; }
+    .mb16 { margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ════════════════════════════════════ HOME ════════════════════════════════════ -->
+  <div class="screen active" id="home">
+    <div class="home-header">
+      <div class="taxi-icon">🚕</div>
+      <h1><span>#</span>RolfsRides</h1>
+      <p>Quality Service, Better Rides!</p>
+    </div>
+
+    <div class="home-body">
+      <!-- Location inputs -->
+      <div class="location-card">
+        <div class="location-row">
+          <div class="dot green"></div>
+          <input type="text" placeholder="Your location" value="Current Location" />
+        </div>
+        <div class="location-row">
+          <div class="dot yellow"></div>
+          <input type="text" placeholder="Where to?" id="dest-input" />
+        </div>
+      </div>
+
+      <!-- Booking type -->
+      <p class="section-label">Choose booking type</p>
+      <div class="booking-options">
+        <div class="booking-card featured" onclick="goTo('standard')">
+          <div class="card-icon">🚖</div>
+          <h3>Standard Ride</h3>
+          <p>Quick booking like Uber</p>
+        </div>
+        <div class="booking-card" onclick="goTo('favorite')">
+          <div class="card-icon">⭐</div>
+          <h3>Favourite Driver</h3>
+          <p>Search & book your driver</p>
+        </div>
+      </div>
+
+      <!-- Special services -->
+      <p class="section-label">Special services</p>
+      <div class="services-strip">
+        <div class="service-pill" onclick="goTo('services')">✈️ Airport</div>
+        <div class="service-pill" onclick="goTo('services')">🗺️ Tours</div>
+        <div class="service-pill" onclick="goTo('services')">🛣️ Long Distance</div>
+        <div class="service-pill" onclick="goTo('services')">🎉 Events</div>
+      </div>
+
+      <button class="cta-btn" onclick="goTo('standard')">Find Me a Ride →</button>
+    </div>
+
+    <div class="nav-bar">
+      <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+      <div class="nav-item" onclick="goTo('favorite')"><div class="nav-icon">⭐</div><div class="nav-label">Favourites</div></div>
+      <div class="nav-item" onclick="goTo('services')"><div class="nav-icon">🗺️</div><div class="nav-label">Services</div></div>
+      <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════ STANDARD BOOKING ════════════════════════════ -->
+  <div class="screen" id="standard">
+    <div class="topbar">
+      <button class="back" onclick="goTo('home')">←</button>
+      <span class="logo-small">🚕</span>
+      <h2>Standard Booking</h2>
+    </div>
+
+    <!-- Route summary -->
+    <div class="ride-summary mt8 padx" style="margin:16px 20px 0;">
+      <div class="route">From: <strong>Current Location</strong></div>
+      <div class="route" style="margin-top:4px;">To: <strong>City Centre</strong></div>
+    </div>
+
+    <!-- Price options -->
+    <div class="price-section">
+      <h3>Choose your ride</h3>
+
+      <div class="price-option selected" onclick="selectOption(this)">
+        <div class="left">
+          <div class="po-icon">🚕</div>
+          <div>
+            <div class="po-label">Standard</div>
+            <div class="po-desc">Comfortable · 4 seats · 4 min</div>
+          </div>
+        </div>
+        <div class="po-price">£12.50</div>
+      </div>
+
+      <div class="price-option" onclick="selectOption(this)">
+        <div class="left">
+          <div class="po-icon">🚙</div>
+          <div>
+            <div class="po-label">Premium</div>
+            <div class="po-desc">Executive · 4 seats · 3 min</div>
+          </div>
+        </div>
+        <div class="po-price">£18.00</div>
+      </div>
+
+      <div class="price-option" onclick="selectOption(this)">
+        <div class="left">
+          <div class="po-icon">🚌</div>
+          <div>
+            <div class="po-label">XL</div>
+            <div class="po-desc">Spacious · 6 seats · 6 min</div>
+          </div>
+        </div>
+        <div class="po-price">£22.00</div>
+      </div>
+    </div>
+
+    <!-- Bid system -->
+    <div class="bid-box">
+      <h4>💰 Bid Higher — Skip the Queue</h4>
+      <p>Offer more than the standard fare to attract drivers faster</p>
+      <div class="bid-row">
+        <button onclick="changeBid(-1)">−</button>
+        <div class="bid-amount" id="bid-display">£12.50</div>
+        <button onclick="changeBid(1)">+</button>
+      </div>
+    </div>
+
+    <div class="fee-note">Platform fee: <span>7.5%</span> standard · <span>10%</span> special services</div>
+
+    <div style="padding: 0 20px 24px;">
+      <button class="cta-btn" onclick="goTo('drivers')">See Available Drivers →</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════ DRIVER SELECTION ════════════════════════════ -->
+  <div class="screen" id="drivers">
+    <div class="topbar">
+      <button class="back" onclick="goTo('standard')">←</button>
+      <span class="logo-small">🚕</span>
+      <h2>Choose Your Driver</h2>
+    </div>
+
+    <div style="padding: 16px 20px 8px; font-size: 13px; color: var(--gray);">
+      4 drivers nearby · Your bid: <strong id="bid-label">£12.50</strong>
+    </div>
+
+    <div class="driver-card selected" onclick="selectDriver(this)">
+      <div class="driver-avatar">👨</div>
+      <div class="driver-info">
+        <h3>Rolf M. <span class="fav-badge">TOP</span></h3>
+        <div class="stars">★★★★★ <span style="color:#777">5.0 (312)</span></div>
+        <div class="driver-meta">🚕 Toyota Prius · EX12 RRR</div>
+      </div>
+      <div class="driver-price">
+        <div class="dp-amount">£12.50</div>
+        <div class="dp-eta">3 min away</div>
+        <div class="dp-badge">OWNER</div>
+      </div>
+    </div>
+
+    <div class="driver-card" onclick="selectDriver(this)">
+      <div class="driver-avatar">👩</div>
+      <div class="driver-info">
+        <h3>Sarah K.</h3>
+        <div class="stars">★★★★★ <span style="color:#777">4.9 (187)</span></div>
+        <div class="driver-meta">🚕 Mercedes E-Class · SH22 KLL</div>
+      </div>
+      <div class="driver-price">
+        <div class="dp-amount">£15.00</div>
+        <div class="dp-eta">5 min away</div>
+      </div>
+    </div>
+
+    <div class="driver-card" onclick="selectDriver(this)">
+      <div class="driver-avatar">👨🏾</div>
+      <div class="driver-info">
+        <h3>James O.</h3>
+        <div class="stars">★★★★☆ <span style="color:#777">4.7 (94)</span></div>
+        <div class="driver-meta">🚗 VW Passat · JO71 AMX</div>
+      </div>
+      <div class="driver-price">
+        <div class="dp-amount">£11.00</div>
+        <div class="dp-eta">7 min away</div>
+      </div>
+    </div>
+
+    <div class="driver-card" onclick="selectDriver(this)">
+      <div class="driver-avatar">👨🏻</div>
+      <div class="driver-info">
+        <h3>Ali R.</h3>
+        <div class="stars">★★★★☆ <span style="color:#777">4.8 (211)</span></div>
+        <div class="driver-meta">🚕 Skoda Octavia · AL19 RRZ</div>
+      </div>
+      <div class="driver-price">
+        <div class="dp-amount">£12.00</div>
+        <div class="dp-eta">4 min away</div>
+      </div>
+    </div>
+
+    <div style="padding: 16px 20px 32px;">
+      <button class="cta-btn" onclick="goTo('confirm')">Confirm Booking →</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════ FAVOURITE DRIVER ════════════════════════════ -->
+  <div class="screen" id="favorite">
+    <div class="topbar">
+      <button class="back" onclick="goTo('home')">←</button>
+      <span class="logo-small">⭐</span>
+      <h2>Favourite Drivers</h2>
+    </div>
+
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" placeholder="Search by name or code..." />
+    </div>
+
+    <div style="padding: 0 20px 8px; font-size: 12px; color: var(--gray);">YOUR FAVOURITES</div>
+
+    <div class="driver-card selected" style="border-color: var(--yellow);" onclick="goTo('drivers')">
+      <div class="driver-avatar">👨</div>
+      <div class="driver-info">
+        <h3>Rolf M. <span class="fav-badge">PREFERRED</span></h3>
+        <div class="stars">★★★★★ <span style="color:#777">5.0 (312)</span></div>
+        <div class="driver-meta">Last ride: 2 days ago</div>
+      </div>
+      <div class="driver-price">
+        <div style="font-size:12px; color:var(--green); font-weight:700;">● Online</div>
+        <div class="dp-eta">3 min away</div>
+      </div>
+    </div>
+
+    <div class="driver-card" onclick="goTo('drivers')">
+      <div class="driver-avatar">👩</div>
+      <div class="driver-info">
+        <h3>Sarah K.</h3>
+        <div class="stars">★★★★★ <span style="color:#777">4.9 (187)</span></div>
+        <div class="driver-meta">Last ride: 1 week ago</div>
+      </div>
+      <div class="driver-price">
+        <div style="font-size:12px; color:var(--gray); font-weight:700;">● Offline</div>
+      </div>
+    </div>
+
+    <div style="padding: 16px 20px 8px; font-size: 12px; color: var(--gray); margin-top: 8px;">ALL DRIVERS</div>
+
+    <div class="driver-card" onclick="goTo('drivers')">
+      <div class="driver-avatar">👨🏾</div>
+      <div class="driver-info">
+        <h3>James O.</h3>
+        <div class="stars">★★★★☆ <span style="color:#777">4.7 (94)</span></div>
+        <div class="driver-meta">Airport specialist</div>
+      </div>
+      <div class="driver-price">
+        <div style="font-size:12px; color:var(--green); font-weight:700;">● Online</div>
+        <div class="dp-eta">7 min away</div>
+      </div>
+    </div>
+
+    <div style="height: 32px;"></div>
+
+    <div class="nav-bar">
+      <div class="nav-item" onclick="goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+      <div class="nav-item active"><div class="nav-icon">⭐</div><div class="nav-label">Favourites</div></div>
+      <div class="nav-item" onclick="goTo('services')"><div class="nav-icon">🗺️</div><div class="nav-label">Services</div></div>
+      <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════ SPECIAL SERVICES ════════════════════════════ -->
+  <div class="screen" id="services">
+    <div class="topbar">
+      <button class="back" onclick="goTo('home')">←</button>
+      <span class="logo-small">🗺️</span>
+      <h2>Special Services</h2>
+    </div>
+
+    <div style="padding: 16px 20px 4px; font-size: 13px; color: var(--gray);">
+      Premium services · <span style="color:var(--yellow-dark); font-weight:700;">10% platform fee</span>
+    </div>
+
+    <div class="service-card mt8" onclick="goTo('standard')">
+      <div class="sc-banner" style="background:#E8F4FD;">✈️</div>
+      <div class="sc-body">
+        <h3>Airport Transfer</h3>
+        <p>Reliable door-to-terminal service. Flight tracking included — your driver waits if you're delayed.</p>
+        <span class="sc-tag">From £35</span>
+      </div>
+    </div>
+
+    <div class="service-card" onclick="goTo('standard')">
+      <div class="sc-banner" style="background:#FFF8E1;">🗺️</div>
+      <div class="sc-body">
+        <h3>City Tours</h3>
+        <p>Local expert drivers show you the best of the city at your own pace. Customisable route.</p>
+        <span class="sc-tag">From £60 / 2hrs</span>
+      </div>
+    </div>
+
+    <div class="service-card" onclick="goTo('standard')">
+      <div class="sc-banner" style="background:#F0FFF0;">🛣️</div>
+      <div class="sc-body">
+        <h3>Long Distance</h3>
+        <p>Intercity travel made easy. Fixed rates, no surge pricing. Drivers set their own competitive price.</p>
+        <span class="sc-tag">Custom quote</span>
+      </div>
+    </div>
+
+    <div class="service-card" onclick="goTo('standard')">
+      <div class="sc-banner" style="background:#FFF0F5;">🎉</div>
+      <div class="sc-body">
+        <h3>Events & Corporate</h3>
+        <p>Multiple bookings, scheduled pickups, and account billing for businesses and events.</p>
+        <span class="sc-tag">Get a quote</span>
+      </div>
+    </div>
+
+    <div style="height: 32px;"></div>
+
+    <div class="nav-bar">
+      <div class="nav-item" onclick="goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+      <div class="nav-item" onclick="goTo('favorite')"><div class="nav-icon">⭐</div><div class="nav-label">Favourites</div></div>
+      <div class="nav-item active"><div class="nav-icon">🗺️</div><div class="nav-label">Services</div></div>
+      <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════ CONFIRMATION ════════════════════════════════ -->
+  <div class="screen" id="confirm">
+    <div class="confirm-header">
+      <div class="check">🎉</div>
+      <h2>Ride Confirmed!</h2>
+      <p>Your driver is on the way</p>
+    </div>
+
+    <div class="confirm-body">
+      <div class="confirm-card">
+        <div class="confirm-row">
+          <span class="label">Driver</span>
+          <span class="value">Rolf M. ⭐ 5.0</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">Vehicle</span>
+          <span class="value">Toyota Prius · EX12 RRR</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">ETA</span>
+          <span class="value green">3 minutes</span>
+        </div>
+      </div>
+
+      <div class="confirm-card">
+        <div class="confirm-row">
+          <span class="label">From</span>
+          <span class="value">Current Location</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">To</span>
+          <span class="value">City Centre</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">Fare</span>
+          <span class="value" id="confirm-fare">£12.50</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">Platform fee (7.5%)</span>
+          <span class="value yellow" id="confirm-fee">£0.94</span>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin: 20px 0 12px; font-size: 32px;">📍</div>
+      <div style="text-align:center; font-size:13px; color:var(--gray); margin-bottom: 20px;">Track your driver in real time</div>
+
+      <button class="cta-btn" onclick="goTo('home')" style="background:var(--dark); color:var(--yellow);">← Back to Home</button>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+  let bidValue = 12.50;
+
+  function goTo(screen) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screen).classList.add('active');
+    document.getElementById(screen).scrollTop = 0;
+    if (screen === 'confirm') updateConfirm();
+    if (screen === 'drivers') {
+      document.getElementById('bid-label').textContent = '£' + bidValue.toFixed(2);
+    }
+  }
+
+  function selectOption(el) {
+    document.querySelectorAll('.price-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    const price = parseFloat(el.querySelector('.po-price').textContent.replace('£',''));
+    bidValue = price;
+    document.getElementById('bid-display').textContent = '£' + bidValue.toFixed(2);
+  }
+
+  function selectDriver(el) {
+    document.querySelectorAll('.driver-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function changeBid(dir) {
+    bidValue = Math.max(5, bidValue + dir);
+    document.getElementById('bid-display').textContent = '£' + bidValue.toFixed(2);
+  }
+
+  function updateConfirm() {
+    const fare = bidValue;
+    const fee = fare * 0.075;
+    document.getElementById('confirm-fare').textContent = '£' + fare.toFixed(2);
+    document.getElementById('confirm-fee').textContent = '£' + fee.toFixed(2);
+  }
+</script>
+</body>
+</html>

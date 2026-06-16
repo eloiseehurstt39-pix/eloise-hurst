@@ -9,7 +9,7 @@ I'm interested in the intersection of AI and real-world applications particularl
 
 ## Education
 
-**BSc Computer Science (Artificial Intelligence)**  
+**BSc (Hons) Computer Science (Artificial Intelligence)**  
 Edinburgh Napier University  
 *Expected graduation: 2026*
 

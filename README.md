@@ -21,7 +21,19 @@ Lycée Français de Barcelone
 
 ## Experience
 
-**Software Developer — Publicis Sapient · Internship ** *(Jun 2022 - jul 2022)**  
+** Artificial Intelligence — Wedia · Internship ** *(May 2026 - July 2026)**  
+Paris, France
+
+- Researched how AI can strengthen the way digital assets are stored, processed and evaluated within a DAM platform
+- Built an automated competitive intelligence workflow using Make.com to deliver a weekly newsletter with summaries of competitor activity to the team
+Researched the integration of GEO (Generative Engine Optimisation) into the DAM, including the generation of AI-driven mini adverts
+- Built a predictive scoring POC to evaluate the performance potential of visual assets using trend analysis, powered by the Gemini API and built with React and  JavaScript
+- Contributed to testing, improving and ensuring the stability of existing AI-powered product features, including Brand Control, asset translation, and text & font editing tools
+- Extended the Brand Control feature by allowing clients to upload reference images to help Gemini better understand brand rules and evaluate whether uploaded assets meet brand requirements
+
+
+
+**Software Developer — Publicis Sapient · Internship ** *(Jun 2022 )**  
 London Area, United Kingdom 
 
 I shadowed a Python programmer during the layout of a website of a supermarket and worked with a graphic designer, creating the design of a poster to inform employees about events in the office using Figma.

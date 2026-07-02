@@ -21,7 +21,7 @@ Lycée Français de Barcelone
 
 ## Experience
 
-** Artificial Intelligence — Wedia · Internship ** *(May 2026 - July 2026)*
+**Artificial Intelligence — Wedia · Internship** *(May 2026 - July 2026)*
 Paris, France
 
 - Researched how AI can strengthen the way digital assets are stored, processed and evaluated within a DAM platform
@@ -33,7 +33,7 @@ Researched the integration of GEO (Generative Engine Optimisation) into the DAM,
 
 
 
-**Software Developer — Publicis Sapient · Internship ** *(Jun 2022 )* 
+**Software Developer — Publicis Sapient · Internship** *(Jun 2022 )* 
 London Area, United Kingdom 
 
 - Shadowed a Python developer during the development of a supermarket website, gaining hands-on exposure to real-world software workflows.

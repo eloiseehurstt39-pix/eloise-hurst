@@ -21,7 +21,7 @@ Lycée Français de Barcelone
 
 ## Experience
 
-**Artificial Intelligence — Wedia · Internship** *(May 2026 - July 2026)*
+**Artificial Intelligence Researcher — Wedia · Internship** *(May 2026 - July 2026)*
 
 Paris, France
 
